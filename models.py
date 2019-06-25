@@ -11,11 +11,12 @@ from sqlalchemy.orm import relationship, backref
 Base = declarative_base()
 
 class PageTypeEnum(enum.Enum):
-    """ """
+    """ Page Type Enum information """
     product_listing = "product_listing"
     product_detail = "product_detail"
 
 class Website(Base):
+    """ Store website information """
     __tablename__ = 'websites'
     
     id = Column(Integer, primary_key=True)
@@ -23,6 +24,7 @@ class Website(Base):
     document_path = Column(String)
 
 class CrawlPage(Base):
+    """ Store crawl page information """
     __tablename__ = 'crawlpages'
     
     id = Column(Integer, primary_key=True)
@@ -37,6 +39,7 @@ Website.crawl_pages = relationship(
     "CrawlPage", order_by = CrawlPage.id, back_populates = "website")
 
 class ListPageInfo(Base):
+    """ Store product list page information"""
     __tablename__ = 'listpageinfo'
 
     id = Column(Integer, primary_key=True)
@@ -52,6 +55,7 @@ ListPageInfo.crawl_pages = relationship(
     backref=backref("crawl_page", uselist=False) )
 
 class ProductInfo(Base):
+    """ Store product detail information """
     __tablename__ = 'productinfo'
     
     id = Column(Integer, primary_key=True)
