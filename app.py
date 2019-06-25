@@ -2,10 +2,11 @@
 from flask import (
     Flask, request, jsonify, make_response)
 from flask.views import MethodView
-from flask_restful import Resource, Api
+from flask_restful import Api
 from settings import db_session, DEBUG
 from mixins import MultipleFieldLookUpMixin
 from models import ProductInfo, CrawlPage, Website
+from paginations import IndexPagination
 import serializers
 
 
@@ -17,6 +18,9 @@ class Index(MethodView, MultipleFieldLookUpMixin):
     ).filter(ProductInfo.crawl_page_id == CrawlPage.id,
              CrawlPage.website_id == Website.id)
     # Default query parameter
+    pagination_format = IndexPagination
+    serializer_class = serializers.ProductInfoSerializer
+
     filter_fields = {
         'id': (ProductInfo, 'id'),
         'site': (Website, 'name'),
@@ -27,9 +31,7 @@ class Index(MethodView, MultipleFieldLookUpMixin):
 
     def get(self):
         """ API endpoint to fetch product list """
-        index = self.get_paginated_queryset()
-        result = serializers.ProductInfoSerializer(many=True).dump(index)
-        return make_response(jsonify(result.data), 200)
+        return make_response(self.pagination_response(), 200)
 
 
 class Detail(MethodView, MultipleFieldLookUpMixin):

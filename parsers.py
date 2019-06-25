@@ -110,9 +110,8 @@ def ziengs_parser(soup):
         for scrap in soup.select('h2[itemprop="brand"]'):
             brand = scrap.getText().strip()
 
-    return [{
-        'category': category, 'name': name, 'brand': brand,
-        'price': price, 'currency': currency}]
+    return [{'category': category, 'name': name, 'brand': brand,
+             'price': price, 'currency': currency}]
 
 
 def omoda_parser(soup):
@@ -184,7 +183,33 @@ def omoda_parser(soup):
 
 
 def omoda_list_parser(soup):
-    """ """
+    """ Parsed omoda html body parser
+
+    Parameter
+    ---------
+    `soup`: <html>
+        omoda product detail html code
+
+    Return
+    ------
+    parser_data_list: <list>
+        List of parser object
+
+        `category`: <str>
+            Product category
+
+        `name`: <str>
+            Product name
+
+        `brand`: <str>
+            Product brand name
+
+        `price`: <float>
+            Product price
+
+        `currency`: <str>
+            Product currency
+    """
     product_list = []
     for scrap in soup.select('[data-google]'):
         category = ''
@@ -211,7 +236,7 @@ def omoda_list_parser(soup):
 
 
 class CrawlerParser():
-    """ """
+    """ Parser to parsed crawer file and html body of each crawled html file """
 
     def __init__(self):
         """ Initialize crawler """
