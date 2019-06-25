@@ -21,19 +21,18 @@ CRAWLER_ROW_COUNT = 0
 
 # Crawler data configuration
 CRAWLED_DATA_INFORMATION = [
-    # {
-    #     'website_name': 'ziengs.nl',
-    #     'crawl_data': 'crawl/crawl_ziengs.nl_2016-05-30T23-15-20.jl'
-    # },
+    {
+        'website_name': 'ziengs.nl',
+        'crawl_data': 'crawl/crawl_ziengs.nl_2016-05-30T23-15-20.jl'
+    },
     {
         'website_name': 'omoda.nl',
         'crawl_data': 'crawl/crawl_omoda.nl_2016-05-30T23-14-58.jl'
+    },
+    {
+        'website_name': 'zalando.nl',
+        'crawl_data': 'crawl/crawl_zalando.nl_2016-05-30T23-14-36.jl'
     }
-    # ,
-    # {
-    #     'website_name': 'zalando.nl',
-    #     'crawl_data': 'crawl/crawl_zalando.nl_2016-05-30T23-14-36.jl'
-    # }
 ]
 
 # Crawler product detail parser mapping
