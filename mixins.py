@@ -1,6 +1,7 @@
 """ """
 from flask import (Flask, request)
 
+
 class MultipleFieldLookUpMixin():
     """ View mixins to perform filter operation on model for
     retrieve data based on filter fileds
@@ -20,22 +21,22 @@ class MultipleFieldLookUpMixin():
         """ Return queryset with filter object """
         queryset = self.queryset
         try:
-            filter = {}
             model_fields = self.filter_fields
-            
+
             # query_param = {
             #     x: request.args.get(x).split(',') \
             #         if request.args.get(x) else '' for x in list(
             #             model_fields.keys())}
             query_param = {
-                x: request.args.get(x) \
-                    if request.args.get(x) else '' for x in list(
-                        model_fields.keys())}
+                x: request.args.get(x)
+                if request.args.get(x) else '' for x in list(
+                    model_fields.keys())}
             for field in query_param:
                 if query_param[field]:
                     column = getattr(*model_fields[field])
-                    # queryset = queryset.filter(column.in_(query_param[field])) 
-                    queryset = queryset.filter(column.ilike(f"%{query_param[field]}%"))
+                    # queryset = queryset.filter(column.in_(query_param[field]))
+                    queryset = queryset.filter(
+                        column.ilike(f"%{query_param[field]}%"))
         except Exception as e:
             pass
         return queryset
@@ -47,7 +48,7 @@ class MultipleFieldLookUpMixin():
     def get_object(self):
         """ Fetch individual object """
         return self.get_queryset().first()
-    
+
     def pagination_response(self):
         """ Get paginated reponse """
         queryset = self.get_paginated_queryset()

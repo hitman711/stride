@@ -1,10 +1,8 @@
 """ """
-import json
-
 from flask import (
     Flask, request, jsonify, make_response)
 from flask.views import MethodView
-from flask_restful import Resource, Api 
+from flask_restful import Resource, Api
 from settings import db_session, DEBUG
 from mixins import MultipleFieldLookUpMixin
 from models import ProductInfo, CrawlPage, Website
@@ -16,12 +14,12 @@ class Index(MethodView, MultipleFieldLookUpMixin):
     # Default queryset
     queryset = db_session.query(ProductInfo).join(
         CrawlPage, Website
-    ).filter(ProductInfo.crawl_page_id==CrawlPage.id,
-        CrawlPage.website_id==Website.id)
-    # Default query parameter 
+    ).filter(ProductInfo.crawl_page_id == CrawlPage.id,
+             CrawlPage.website_id == Website.id)
+    # Default query parameter
     filter_fields = {
-        'id': (ProductInfo, 'id'), 
-        'site': (Website, 'name'), 
+        'id': (ProductInfo, 'id'),
+        'site': (Website, 'name'),
         'brand': (ProductInfo, 'brand'),
         'category': (CrawlPage, 'category'),
         'name': (ProductInfo, 'name')
@@ -39,12 +37,12 @@ class Detail(MethodView, MultipleFieldLookUpMixin):
     # Default queryset
     queryset = db_session.query(ProductInfo).join(
         CrawlPage, Website
-    ).filter(ProductInfo.crawl_page_id==CrawlPage.id,
-        CrawlPage.website_id==Website.id)
-    
+    ).filter(ProductInfo.crawl_page_id == CrawlPage.id,
+             CrawlPage.website_id == Website.id)
+
     def get_queryset(self):
         return self.filter_queryset().filter(
-            ProductInfo.id==request.view_args.get('product_id'))
+            ProductInfo.id == request.view_args.get('product_id'))
 
     def get(self, *args, **kwargs):
         """ API endpoint to fetch product detail """

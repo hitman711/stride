@@ -2,14 +2,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# Flask project debug mode 
+# Flask project debug mode
 DEBUG = True
 
 # Database configuration
-db_engine = create_engine('sqlite:///nelson_crawler.db', echo = True)
+db_engine = create_engine('sqlite:///nelson_crawler.db', echo=True)
 
 # Database session binging
-Session = sessionmaker(bind = db_engine)
+Session = sessionmaker(bind=db_engine)
 db_session = Session()
 
 # Number of row crawl from each crawler file
@@ -33,14 +33,14 @@ CRAWLED_DATA_INFORMATION = [
 ]
 
 # Crawler product detail parser mapping
-PARSER_MAPPING = { 
+PARSER_MAPPING = {
     'ziengs.nl': 'ziengs_parser',
     'omoda.nl': 'omoda_parser',
     'zalando.nl': 'zalando_parser'
 }
 
 # Crawler product list parser mapping
-LIST_PARSER_MAPPING = { 
+LIST_PARSER_MAPPING = {
     'ziengs.nl': '',
     'omoda.nl': 'omoda_list_parser',
     'zalando.nl': ''

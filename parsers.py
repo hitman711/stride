@@ -1,6 +1,5 @@
 """ """
 import json
-from datetime import datetime
 
 from settings import (
     db_session, CRAWLED_DATA_INFORMATION, PARSER_MAPPING,
@@ -11,25 +10,26 @@ from bs4 import BeautifulSoup
 
 import models
 
+
 def zalando_parser(soup):
     """ Parsed zalando html body parser
-    
+
     Parameter
     ---------
     `soup`: <html>
         zalando product detail html code
-    
+
     Return
     ------
     parser_data_list: <list>
-        List of parser object 
+        List of parser object
 
         `category`: <str>
             Product category
 
         `name`: <str>
             Product name
-        
+
         `brand`: <str>
             Product brand name
 
@@ -51,33 +51,34 @@ def zalando_parser(soup):
         if product_data.get('offers'):
             price = product_data['offers'][0]['price']
             currency = product_data['offers'][0]['priceCurrency']
-    
+
     for scrap in soup.select('[data-article-category]'):
         category = scrap['data-article-category'].strip()
 
     return [{
-        'category':category, 'name':name, 'brand':brand,
-        'price':price, 'currency':currency}]
+        'category': category, 'name': name, 'brand': brand,
+        'price': price, 'currency': currency}]
+
 
 def ziengs_parser(soup):
     """ Parsed ziengs html body parser
-    
+
     Parameter
     ---------
     `soup`: <html>
         ziengs product detail html code
-    
+
     Return
     ------
     parser_data_list: <list>
-        List of parser object 
+        List of parser object
 
         `category`: <str>
             Product category
 
         `name`: <str>
             Product name
-        
+
         `brand`: <str>
             Product brand name
 
@@ -91,7 +92,7 @@ def ziengs_parser(soup):
     brand = ''
     price = 0
     currency = ''
-    name = ''        
+    name = ''
     for scrap in soup.select('meta[itemprop]'):
         if scrap['itemprop'] == 'category':
             category = scrap['content'].strip()
@@ -110,28 +111,29 @@ def ziengs_parser(soup):
             brand = scrap.getText().strip()
 
     return [{
-        'category':category, 'name':name, 'brand':brand,
-        'price':price, 'currency':currency}]
+        'category': category, 'name': name, 'brand': brand,
+        'price': price, 'currency': currency}]
+
 
 def omoda_parser(soup):
     """ Parsed omoda html body parser
-    
+
     Parameter
     ---------
     `soup`: <html>
         omoda product detail html code
-    
+
     Return
     ------
     parser_data_list: <list>
-        List of parser object 
+        List of parser object
 
         `category`: <str>
             Product category
 
         `name`: <str>
             Product name
-        
+
         `brand`: <str>
             Product brand name
 
@@ -145,7 +147,7 @@ def omoda_parser(soup):
     brand = ''
     price = 0
     currency = ''
-    name = ''   
+    name = ''
     for scrap in soup.select('[data-google]'):
         try:
             data = json.loads(scrap['data-google'])
@@ -177,8 +179,9 @@ def omoda_parser(soup):
             brand = scrap['content'].strip()
 
     return [{
-        'category':category, 'name':name, 'brand':brand,
-        'price':price, 'currency':currency}]
+        'category': category, 'name': name, 'brand': brand,
+        'price': price, 'currency': currency}]
+
 
 def omoda_list_parser(soup):
     """ """
@@ -202,9 +205,10 @@ def omoda_list_parser(soup):
         except Exception as e:
             pass
         product_list.append({
-        'category':category, 'name':name, 'brand':brand,
-        'price':price, 'currency':currency})
+            'category': category, 'name': name, 'brand': brand,
+            'price': price, 'currency': currency})
     return product_list
+
 
 class CrawlerParser():
     """ """
@@ -215,18 +219,18 @@ class CrawlerParser():
 
     def html_parser(self, body, page_type, website_name):
         """ Assign valid parser to html body
-        
+
         Parameter
         ---------
         `body`: <str>
             Html string body
 
         `page_type`: <str>
-            Page type name 
+            Page type name
 
         `website_name`: <str>
             Website name
-        
+
         Return
         ------
         parser_data_list: <list>
@@ -252,7 +256,7 @@ class CrawlerParser():
 
         `website_id`: <int>
             Website object id
-        
+
         `website_name`: <str>
             Website name
         """
@@ -264,7 +268,7 @@ class CrawlerParser():
             # Page url
             page_url = each_line.page_url.values[0]
             # Crawler date convert string to datetime
-            crawled_at =  pandas.Timestamp(each_line.crawled_at.values[0])
+            crawled_at = pandas.Timestamp(each_line.crawled_at.values[0])
             # Page type
             page_type = each_line.page_type.values[0]
             # Product list page number
@@ -277,18 +281,20 @@ class CrawlerParser():
             ordering = 0
 
             # Check each row page_type
-            # Parse data based on page type 
+            # Parse data based on page type
             if page_type == models.PageTypeEnum.product_listing.value:
                 # Split category and sub category for product listing page
                 if len(each_line.product_category.values[0]) > 1:
-                    category=each_line.product_category.values[0][0]
-                    sub_category=each_line.product_category.values[0][1]
+                    category = each_line.product_category.values[0][0]
+                    sub_category = each_line.product_category.values[0][1]
                 else:
-                    category=each_line.product_category.values[0][0]
-                body = [] # self.html_parser(each_line.body.values[0], page_type)
+                    category = each_line.product_category.values[0][0]
+                # self.html_parser(each_line.body.values[0], page_type)
+                body = []
             else:
                 # Pase row body to html parser
-                body = self.html_parser(each_line.body.values[0], page_type, website_name)
+                body = self.html_parser(
+                    each_line.body.values[0], page_type, website_name)
                 category = body[0]['category']
 
             # Add crawled data in crawlPage table
@@ -298,12 +304,12 @@ class CrawlerParser():
                 category=category)
 
             if page_type == models.PageTypeEnum.product_listing.value:
-                # Add product listing page information in ListPageInfo table 
+                # Add product listing page information in ListPageInfo table
                 crawl_row.list_page_info = models.ListPageInfo(
                     sub_category=sub_category, ordering=ordering,
                     page_number=page_number)
 
-            # Check html parser response    
+            # Check html parser response
             if body:
                 # Add each product in ProductInfo table
                 crawl_row.product_infos = [
@@ -320,7 +326,7 @@ class CrawlerParser():
                     break
 
     def main(self):
-        """ Pass crawl file and store data in database 
+        """ Pass crawl file and store data in database
 
         Set `CRAWLED_DATA_INFORMATION` in settings file which contain
         website name and path of crawler file.
@@ -329,8 +335,8 @@ class CrawlerParser():
         for crawer_info in CRAWLED_DATA_INFORMATION:
             # Store website name and crawler file path
             website = models.Website(
-                name = crawer_info['website_name'],
-                document_path = crawer_info['crawl_data'])
+                name=crawer_info['website_name'],
+                document_path=crawer_info['crawl_data'])
             # Commit website information
             db_session.add(website)
             db_session.commit()
@@ -339,5 +345,6 @@ class CrawlerParser():
                 website.document_path,
                 website.id,
                 website.name)
+
 
 CrawlerParser()
