@@ -62,4 +62,54 @@ There is two API endpoint to retrieve data from the database.
     
     `2. http://127.0.0.1:8000/<int:product_id>	    -		product_detail`
 
+1.product_list
+
+    Retrieve list of product list. API support multiple query parameters to
+    search specific products i.e (brand, category, name, site, id).
+    Return response provide you count, next, previous, result.
+
+
+    Response Example:-
+        {
+            "count": 244, 
+            "next": "http://127.0.0.1:8000/limit=1&page=2", 
+            "previous": "", 
+            "results": [
+                {
+                    "brand": "Rohde", 
+                    "category": "Sandalen & slippers", 
+                    "currency": "EUR", 
+                    "id": 1, 
+                    "name": "Rohde Pantoffel Zwart", 
+                    "price": 44.95, 
+                    "url": "http://www.ziengs.nl/rohde-pantoffel_zwart_10443.html", 
+                    "website": "ziengs.nl"
+                }
+            ]
+        }
+
+2.product_detail
+
+    Retrive product detail information. API takes product_id as a query parameter.
+    In case of invalid id API return error status code 400 with msg not found.
+
+    Response Example:-
+        
+        `
+        {
+            "brand": "Rohde", 
+            "category": "Sandalen & slippers", 
+            "currency": "EUR", 
+            "id": 1, 
+            "name": "Rohde Pantoffel Zwart", 
+            "price": 44.95, 
+            "url": "http://www.ziengs.nl/rohde-pantoffel_zwart_10443.html", 
+            "website": "ziengs.nl"
+        }
+    
+        {
+            "detail": "Not found"
+        }
+        `
+
 
