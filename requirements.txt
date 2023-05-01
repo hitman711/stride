@@ -1,7 +1,7 @@
 autopep8==1.4.4
 flake8==3.7.7
 beautifulsoup4==4.7.1
-Flask==1.0.3
+Flask==2.3.2
 flask-marshmallow==0.10.1
 Flask-RESTful==0.3.7
 marshmallow==2.19.5
